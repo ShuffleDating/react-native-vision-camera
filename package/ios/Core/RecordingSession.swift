@@ -39,6 +39,7 @@ class RecordingSession {
   private var isFinishing = false
   private var hasWrittenLastVideoFrame = false
   private var hasWrittenLastAudioFrame = false
+  private let startHandler: () -> Void
 
   private let lock = DispatchSemaphore(value: 1)
 
@@ -72,8 +73,10 @@ class RecordingSession {
 
   init(url: URL,
        fileType: AVFileType,
-       completion: @escaping (RecordingSession, AVAssetWriter.Status, Error?) -> Void) throws {
+       completion: @escaping (RecordingSession, AVAssetWriter.Status, Error?) -> Void,
+       onStart: @escaping () -> Void) throws {
     completionHandler = completion
+    startHandler = onStart
 
     do {
       assetWriter = try AVAssetWriter(outputURL: url, fileType: fileType)
@@ -158,6 +161,7 @@ class RecordingSession {
     // Start the sesssion at the given time. Frames with earlier timestamps (e.g. late frames) will be dropped.
     assetWriter.startSession(atSourceTime: currentTime)
     startTimestamp = currentTime
+    self.startHandler()
     ReactLogger.log(level: .info, message: "Started RecordingSession at time: \(currentTime.seconds)")
 
     if audioWriter == nil {
