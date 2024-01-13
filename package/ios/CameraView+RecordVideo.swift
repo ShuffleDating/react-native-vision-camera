@@ -14,6 +14,11 @@ extension CameraView: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAud
   func startRecording(options: NSDictionary, callback jsCallback: @escaping RCTResponseSenderBlock) {
     // Type-safety
     let callback = Callback(jsCallback)
+    let onStart = {
+        if let onRecordingStart = self.onRecordingStart {
+          onRecordingStart([:])
+        }
+      }
 
     do {
       let options = try RecordVideoOptions(fromJSValue: options)
@@ -24,6 +29,7 @@ extension CameraView: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAud
         onVideoRecorded: { video in
           callback.resolve(video.toJSValue())
         },
+        onStart: onStart,
         onError: { error in
           callback.reject(error: error)
         }
