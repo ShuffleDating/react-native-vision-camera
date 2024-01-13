@@ -91,6 +91,7 @@ export class Camera extends React.PureComponent<CameraProps, CameraState> {
     super(props)
     this.onViewReady = this.onViewReady.bind(this)
     this.onInitialized = this.onInitialized.bind(this)
+    this.onRecordingStart = this.onRecordingStart.bind(this);
     this.onStarted = this.onStarted.bind(this)
     this.onStopped = this.onStopped.bind(this)
     this.onError = this.onError.bind(this)
@@ -409,6 +410,10 @@ export class Camera extends React.PureComponent<CameraProps, CameraState> {
     this.props.onInitialized?.()
   }
 
+  private onRecordingStart(): void {
+    this.props.onRecordingStart?.();
+  }
+
   private onStarted(): void {
     this.props.onStarted?.()
   }
@@ -481,6 +486,7 @@ export class Camera extends React.PureComponent<CameraProps, CameraState> {
         onViewReady={this.onViewReady}
         onInitialized={this.onInitialized}
         onCodeScanned={this.onCodeScanned}
+        onRecordingStart={this.onRecordingStart}
         onStarted={this.onStarted}
         onStopped={this.onStopped}
         onError={this.onError}
