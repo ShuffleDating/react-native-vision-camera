@@ -256,7 +256,7 @@ export interface CameraProps extends ViewProps {
   /**
    * Called when the camera actually starts recording video
    */
-   onRecordingStart?: () => void;
+  onRecordingStart?: () => void
   /**
    * Called when the camera stopped the session (`isActive={false}`)
    */
